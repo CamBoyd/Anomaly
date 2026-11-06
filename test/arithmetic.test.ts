@@ -1,4 +1,3 @@
-
 import { describe, it, expect } from "vitest";
 import { runAnomaly } from "../src/anomaly.js";
 
@@ -8,7 +7,6 @@ function calculate(expression: string): number {
 }
 
 describe("Anomaly arithmetic", () => {
-
   it("adds numbers", () => {
     expect(calculate("10 + 5")).toBe(15);
   });
@@ -69,7 +67,22 @@ describe("Anomaly arithmetic", () => {
   });
 
   it("rejects division by zero", () => {
-    expect(() => calculate("10 / 0"))
-      .toThrow("Division by zero.");
+    expect(() => calculate("10 / 0")).toThrow("Division by zero.");
+  });
+
+  it("evaluates exponents right to left", () => {
+    expect(calculate("2 ^ 3 ^ 2")).toBe(512);
+  });
+
+  it("respects exponent precedence", () => {
+    expect(calculate("2 * 3 ^ 2")).toBe(18);
+  });
+
+  it("handles negative exponents", () => {
+    expect(calculate("2 ^ -3")).toBe(0.125);
+  });
+
+  it("handles unary minus with exponents", () => {
+    expect(calculate("-2 ^ 2")).toBe(-4);
   });
 });

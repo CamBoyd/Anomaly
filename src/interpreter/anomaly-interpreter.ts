@@ -121,6 +121,16 @@ export class AnomalyInterpreter {
 
           return left / right;
 
+        case "%":
+          if (right === 0) {
+            throw new Error("Modulo by zero.");
+          }
+
+          return left % right;
+
+        case "^":
+          return left ** right;
+
         default:
           throw new Error(
             `Unknown binary operator: ${expression.operator}`

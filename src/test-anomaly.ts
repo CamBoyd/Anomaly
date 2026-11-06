@@ -19,6 +19,12 @@ const code = `
 
     set negative = -25
     show negative
+
+    set modulo = 10 % 3
+    show modulo
+
+    set power = 2 ^ 3 ^ 2
+    show power
 `;
 
 try {

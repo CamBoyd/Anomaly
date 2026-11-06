@@ -40,7 +40,7 @@ Multiplication infers Expression:
     Unary
     (
         {infer BinaryExpression.left=current}
-        operator=('*' | '/')
+        operator=('*' | '/' | '%')
         right=Unary
     )*;
 
@@ -51,7 +51,16 @@ Unary infers Expression:
         operator=('-' | '+')
         operand=Unary
     )
-    | Primary;
+    | Exponentation;
+
+// Exponents
+Exponentation infers Expression:
+    Primary
+    (
+        {infer BinaryExpression.left=current}
+        operator=('^')
+        right=Unary
+    )?;
 
 // Numbers, variables and parentheses
 Primary infers Expression:
