@@ -1,0 +1,16 @@
+{
+    "projectName": "Anomaly",
+    "languages": [
+        {
+            "id": "anomaly",
+            "grammar": "src/language/anomaly.langium",
+            "fileExtensions": [
+                ".anomaly"
+            ],
+            "textMate": {
+                "out": "syntaxes/anomaly.tmLanguage.json"
+            }
+        }
+    ],
+    "out": "src/generated"
+}
