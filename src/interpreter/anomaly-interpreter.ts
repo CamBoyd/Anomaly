@@ -1,4 +1,3 @@
-
 import {
   type Model,
   type Expression,
@@ -7,8 +6,10 @@ import {
   isNumberLiteral,
   isVariableReference,
   isBinaryExpression,
-  isUnaryExpression
+  isUnaryExpression,
 } from "../generated/ast.js";
+import type { AstNode } from "langium";
+import { AnomalyRuntimeError } from "./anomaly-runtime-error.js";
 
 export interface ExecutionResult {
   variables: Record<string, number>;
@@ -25,7 +26,6 @@ export class AnomalyInterpreter {
     this.output = [];
 
     for (const statement of program.statements) {
-
       // Handle variable assignments
       if (isSetStatement(statement)) {
         const value = this.evaluate(statement.value);
@@ -43,18 +43,17 @@ export class AnomalyInterpreter {
 
     return {
       variables: Object.fromEntries(this.variables),
-      output: [...this.output]
+      output: [...this.output],
     };
   }
 
   private evaluate(expression: Expression): number {
-
     // ------------------------------------
     // Numeric literals
     // Example: 150
     // ------------------------------------
     if (isNumberLiteral(expression)) {
-      return Number(expression.value);
+      return this.validateNumber(Number(expression.value), expression);
     }
 
     // ------------------------------------
@@ -65,14 +64,12 @@ export class AnomalyInterpreter {
       const value = this.variables.get(expression.name);
 
       if (value === undefined) {
-        throw new Error(
-          `Variable "${expression.name}" is not defined.`
-        );
+        throw new Error(`Variable "${expression.name}" is not defined.`);
       }
 
       return value;
     }
-    
+
     // ------------------------------------
     // Unary expressions
     // Examples: -10, +5, -(10 + 5)
@@ -83,15 +80,13 @@ export class AnomalyInterpreter {
 
       switch (expression.operator) {
         case "-":
-          return -value;
+          return this.validateNumber(-value, expression);
 
         case "+":
-          return +value;
+          return this.validateNumber(+value, expression);
 
         default:
-          throw new Error(
-            `Unknown unary operator: ${expression.operator}`
-          );
+          throw new Error(`Unknown unary operator: ${expression.operator}`);
       }
     }
 
@@ -106,38 +101,44 @@ export class AnomalyInterpreter {
 
       switch (expression.operator) {
         case "+":
-          return left + right;
+          return this.validateNumber(left + right, expression);
 
         case "-":
-          return left - right;
+          return this.validateNumber(left - right, expression);
 
         case "*":
-          return left * right;
+          return this.validateNumber(left * right, expression);
 
         case "/":
           if (right === 0) {
-            throw new Error("Division by zero.");
+            throw new AnomalyRuntimeError("Division by zero.", expression);
           }
 
-          return left / right;
+          return this.validateNumber(left / right, expression);
 
         case "%":
           if (right === 0) {
-            throw new Error("Modulo by zero.");
+            throw new AnomalyRuntimeError("Modulo by zero.", expression);
           }
 
-          return left % right;
+          return this.validateNumber(left % right, expression);
 
         case "^":
-          return left ** right;
+          return this.validateNumber(left ** right, expression);
 
         default:
-          throw new Error(
-            `Unknown binary operator: ${expression.operator}`
-          );
+          throw new AnomalyRuntimeError(`Unknown binary operator: ${expression.operator}`, expression);
       }
     }
 
     throw new Error("Unsupported expression.");
+  }
+
+  private validateNumber(value: number, node: AstNode): number {
+    if (!Number.isFinite(value)) {
+      throw new AnomalyRuntimeError("Calculation produced an invalid number.", node);
+    }
+
+    return value;
   }
 }

@@ -85,4 +85,18 @@ describe("Anomaly arithmetic", () => {
   it("handles unary minus with exponents", () => {
     expect(calculate("-2 ^ 2")).toBe(-4);
   });
+
+  it("rejects numeric overflow", () => {
+    expect(() => calculate("10 ^ 1000")).toThrow(
+      "Calculation produced an invalid number.",
+    );
+  });
+
+  it("reports the location of an invalid calculation", () => {
+    expect(() => runAnomaly("show 10 ^ 1000")).toThrow(/Line 1, Column 6/);
+  });
+
+  it("reports division by zero", () => {
+    expect(() => calculate("10 / 0")).toThrow("Division by zero.");
+  });
 });
