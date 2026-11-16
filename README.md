@@ -66,6 +66,26 @@ set overdue = Invoices where Balance > 0
 show sum(overdue.Balance)
 ```
 
+### Current Working Example
+```
+set price = 150
+set quantity = 4
+set subtotal = price * quantity
+set overdueDays = 30
+
+if 1==2 or subtotal > 500 and not overdueDays > 30
+    show 1
+else if 1==1 or balance < 0
+    show 2
+else
+    show 3
+end
+```
+Result
+```
+1
+```
+
 ## Architecture
 
 Anomaly consists of several components:
@@ -74,6 +94,8 @@ Anomaly consists of several components:
 - **Parser:** Converts source code into an Abstract Syntax Tree (AST).
 - **Validator:** Detects invalid statements and expressions.
 - **Interpreter:** Executes programs represented by the AST.
+
+## Planned Features
 - **Runtime:** Manages variables, functions, and execution limits.
 - **Dataset Engine:** Performs operations on structured data.
 - **Visual Builder:** Allows programs to be created without writing code.
