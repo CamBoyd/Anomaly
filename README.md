@@ -1,22 +1,3 @@
-# Workspace overview
-
-Depending on the selection during the project generation you will have one or more packages contained in the packages directory.
-Please check the specific projects here:
-
-- [packages/language](./packages/language/README.md) This package is always available and contains the language definition.
-- [packages/cli](./packages/cli/README.md) *Optional* Is only available if you chose to use the command-line interface.
-- [packages/extension](./packages/extension/langium-quickstart.md) *Optional* Contains the VSCode extension if you chose to create it.
-
-## What's in the folder?
-
-Some file are contained in the root directory as well.
-
-- [package.json](./package.json) - The manifest file the main workspace package
-- [tsconfig.json](./tsconfig.json) - The base TypeScript compiler configuration
-- [tsconfig.build.json](./tsconfig.build.json) - Configuration used to build the complete source code.
-- [.gitignore](.gitignore) - Files ignored by git
-
-
 # Anomaly
 
 **Anomaly is a readable, data-oriented programming language designed for spreadsheets, datasets, and web applications.**
@@ -122,21 +103,33 @@ npm run langium:generate
 Run the tests:
 
 ```bash
-npx vitest run
+npm test
 ```
 
-Run an example program once the CLI is configured:
+Build the parser and interpreter:
 
 ```bash
-npx tsx src/cli.ts examples/hello.anomaly
+npm run build
 ```
+
+Run the development demo in `src/test-anomaly.ts`:
+
+```bash
+npm run demo
+```
+
+The language grammar and interpreter live in `src`, with tests in `test`.
+Parser generation writes to `src/generated` and `syntaxes`; the build writes
+compiled JavaScript and declarations to `out`. Use `npm run clean` to remove
+the compiled output. The original generated workspace packages, example CLI,
+and example VS Code extension have been removed.
 
 ## Development Roadmap
 
 - [X] Variables and literals
-- [ ] Mathematical expressions
+- [X] Mathematical expressions
 - [ ] Text, booleans, and null
-- [ ] Conditional statements
+- [X] Conditional statements
 - [ ] Loops
 - [ ] Functions
 - [ ] Lists and records

@@ -1,17 +1,14 @@
 {
-    "files": [],
-    "references": [
-        {
-            "path": "./packages/language/tsconfig.src.json"
-        },
-        {
-            "path": "./packages/language/tsconfig.test.json"
-        },
-        {
-            "path": "./packages/cli/tsconfig.json"
-        },
-        {
-            "path": "./packages/extension/tsconfig.json"
-        }
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "rootDir": "src",
+        "outDir": "out",
+        "composite": false
+    },
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "src/test-anomaly.ts"
     ]
 }

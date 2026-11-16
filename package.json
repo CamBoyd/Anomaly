@@ -1,32 +1,33 @@
 {
     "name": "anomaly-workspace",
-    "description": "Base workspace package",
+    "description": "Anomaly language parser and interpreter",
     "version": "0.0.1",
     "type": "module",
     "private": true,
     "scripts": {
-        "clean": "npm run clean --workspaces",
-        "watch": "tsc -b tsconfig.build.json --watch",
-        "build": "tsc -b tsconfig.build.json && npm run build --workspaces",
+        "clean": "shx rm -rf out",
+        "watch": "tsc -p tsconfig.build.json --watch",
+        "build": "npm run langium:generate && tsc -p tsconfig.build.json",
         "build:clean": "npm run clean && npm run build",
-        "langium:generate": "npm run --workspace packages/language langium:generate",
-        "langium:watch": "npm run --workspace packages/language langium:watch",
-        "test": "npm run --workspace packages/language test"
+        "langium:generate": "langium generate",
+        "langium:watch": "langium generate --watch",
+        "pretest": "npm run langium:generate",
+        "test": "vitest run",
+        "demo": "tsx src/test-anomaly.ts"
     },
     "devDependencies": {
         "@types/node": "~20.19.43",
         "shx": "~0.4.0",
         "tsx": "^4.23.15",
         "typescript": "~5.9.3",
-        "vitest": "^4.1.12"
+        "vitest": "^4.1.12",
+        "langium-cli": "~4.4.0"
     },
-    "workspaces": [
-        "packages/language",
-        "packages/cli",
-        "packages/extension"
-    ],
     "allowScripts": {
         "esbuild@0.28.2": true,
         "fsevents@2.3.3": true
+    },
+    "dependencies": {
+        "langium": "~4.4.0"
     }
 }

@@ -5,7 +5,7 @@
     "tasks": [
         {
             "label": "Build anomaly",
-            "command": "npm run langium:generate && npm run build",
+            "command": "npm run build",
             "type": "shell",
             "group": {
                 "kind": "build",
